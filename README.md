@@ -1,4 +1,4 @@
-# 🧬 Sequence Africa NGS Hub
+# 🧬  NGS Hub
 
 Educational genomics learning resources focused on Illumina sequencing workflows, clinical NGS, RNA-Seq, and cancer genomics.
 
