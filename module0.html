@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGS Hub — Module 0: Understanding NGS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-50: #E1F5EE;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --purple-50: #EEEDFE;
+    --purple-600: #534AB7;
+    --purple-800: #3C3489;
+    --amber-50: #FAEEDA;
+    --amber-600: #854F0B;
+    --amber-800: #633806;
+    --coral-50: #FAECE7;
+    --coral-600: #993C1D;
+    --coral-800: #712B13;
+    --gray-50: #F1EFE8;
+    --gray-600: #5F5E5A;
+    --gray-800: #444441;
+    --text: #1a1a18;
+    --text-muted: #5a5a56;
+    --bg: #faf9f6;
+    --border: rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  header {
+    background: #0F6E56;
+    color: white;
+    padding: 48px 40px 40px;
+    border-bottom: 3px solid #085041;
+  }
+
+  .header-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 12px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  header p {
+    font-size: 16px;
+    opacity: 0.8;
+    max-width: 560px;
+  }
+
+  .module-nav {
+    background: #085041;
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .module-nav a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 16px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .module-nav a:hover,
+  .module-nav a.active {
+    color: white;
+    border-bottom-color: #5DCAA5;
+  }
+
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 40px 80px;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-number {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal-600);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 32px 0 10px;
+    color: var(--text);
+  }
+
+  p {
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .opening-quote {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(18px, 3vw, 22px);
+    line-height: 1.5;
+    color: var(--teal-600);
+    border-left: 3px solid var(--teal-600);
+    padding: 16px 24px;
+    margin-bottom: 28px;
+    background: var(--teal-50);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .diagram-container {
+    margin: 36px 0;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+  }
+
+  .diagram-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .step-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .app-card {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .app-card.teal { background: var(--teal-50); border-color: #9FE1CB; }
+  .app-card.coral { background: var(--coral-50); border-color: #F5C4B3; }
+  .app-card.purple { background: var(--purple-50); border-color: #CECBF6; }
+  .app-card.amber { background: var(--amber-50); border-color: #FAC775; }
+
+  .app-card-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .app-card.teal .app-card-title { color: var(--teal-800); }
+  .app-card.coral .app-card-title { color: var(--coral-800); }
+  .app-card.purple .app-card-title { color: var(--purple-800); }
+  .app-card.amber .app-card-title { color: var(--amber-800); }
+
+  .app-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .closing-block {
+    background: #0F6E56;
+    color: white;
+    border-radius: 12px;
+    padding: 40px;
+    margin-top: 56px;
+    text-align: center;
+  }
+
+  .closing-block p {
+    color: rgba(255,255,255,0.85);
+    font-size: 18px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .closing-block .cta {
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  svg text { font-family: 'DM Sans', sans-serif; }
+
+  .node { cursor: pointer; }
+  .node:hover rect { opacity: 0.85; }
+
+  .c-teal rect { fill: #E1F5EE; stroke: #0F6E56; }
+  .c-teal text { fill: #085041; }
+  .c-purple rect { fill: #EEEDFE; stroke: #534AB7; }
+  .c-purple text { fill: #3C3489; }
+  .c-amber rect { fill: #FAEEDA; stroke: #854F0B; }
+  .c-amber text { fill: #633806; }
+  .c-coral rect { fill: #FAECE7; stroke: #993C1D; }
+  .c-coral text { fill: #712B13; }
+  .c-gray rect { fill: #F1EFE8; stroke: #5F5E5A; }
+  .c-gray text { fill: #444441; }
+
+  .arr { stroke: #5a5a56; stroke-width: 1.5; fill: none; }
+  .th { font-size: 14px; font-weight: 500; }
+  .ts { font-size: 12px; font-weight: 400; }
+
+  @media (max-width: 600px) {
+    header, main { padding-left: 20px; padding-right: 20px; }
+    .module-nav { padding: 0 20px; }
+    .app-grid { grid-template-columns: 1fr; }
+    .closing-block { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">NGS Hub · Module 0</div>
+  <h1>Understanding NGS — Context, Process, and Applications</h1>
+  <p>Before you run a single command, understand why it matters. This module is your foundation.</p>
+</header>
+
+<nav class="module-nav">
+  <a href="#what-is-ngs" class="active">What is NGS?</a>
+  <a href="#why-africa">Why Africa</a>
+  <a href="#sample-to-data">Sample to data</a>
+  <a href="#applications">Applications</a>
+  <a href="#what-you-learn">What you'll learn</a>
+</nav>
+
+<main>
+
+  <!-- Section 1 -->
+  <section class="section" id="what-is-ngs">
+    <div class="section-number">Section 1</div>
+    <h2>What is NGS?</h2>
+
+    <div class="opening-quote">
+      Somewhere in Kenya, a child is admitted to hospital with a fever that does not respond to the usual treatment. The doctors suspect malaria — but which strain? Is it resistant to the drugs they have? To answer that, they need to read the pathogen's genetic code.
+    </div>
+
+    <p>That is what next-generation sequencing makes possible.</p>
+
+    <p>NGS is a technology that reads DNA or RNA at scale — fast, affordably, and in enormous detail. Where older methods could read one small piece of genetic material at a time, NGS reads millions of fragments simultaneously. The result is a detailed picture of a genome — whether it belongs to a virus, a bacterium, a tumour, or a person.</p>
+
+    <p>Think of it like this. Older sequencing was like reading a book one word at a time. NGS reads the entire library at once — and then a computer helps you make sense of it.</p>
+
+    <p>That shift — from slow and limited to fast and comprehensive — is why NGS has changed everything about how we study disease, design treatments, and understand human biology.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 2 -->
+  <section class="section" id="why-africa">
+    <div class="section-number">Section 2</div>
+    <h2>Why NGS matters for Africa</h2>
+
+    <p>Africa carries the heaviest disease burden in the world. Malaria, tuberculosis, HIV, sickle cell disease, cholera, Ebola — these are not abstract statistics. They are the reality of patients, families, and health systems across the continent every single day.</p>
+
+    <p>And yet, for a long time, the genomic data used to understand, track, and fight these diseases came mostly from elsewhere. Samples collected in Africa. Sequenced in Europe or North America. Decisions made far from the people most affected.</p>
+
+    <p>That is changing — but not fast enough.</p>
+
+    <p>NGS is the technology that makes it possible for African scientists, in African laboratories, to generate the data that African health systems need. To track how a pathogen is mutating in real time. To understand why a treatment works in one population but not another. To build genomic databases that actually reflect African genetic diversity.</p>
+
+    <p>This matters because biology is not universal in the way we once assumed. A variant that causes disease in one population may be harmless in another. A drug that works in a European clinical trial may perform differently in an East African patient. Without African-generated data, African patients are making do with answers that were never really about them.</p>
+
+    <p>NGS gives African scientists the power to ask — and answer — their own questions.</p>
+
+    <p><strong>That is not a small thing. That is the difference between being a subject of research and being the author of it.</strong></p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 3 -->
+  <section class="section" id="sample-to-data">
+    <div class="section-number">Section 3</div>
+    <h2>From sample to data</h2>
+
+    <p>Most people hear "sequencing" and imagine something futuristic and out of reach. But the journey from a biological sample to meaningful genomic data follows a logical path — and once you understand each step, the whole process starts to make sense.</p>
+
+    <div class="diagram-container">
+      <div class="diagram-label">The NGS workflow — step by step</div>
+      <svg width="100%" viewBox="0 0 680 560" role="img">
+        <title>From sample to data — NGS workflow</title>
+        <desc>Six sequential steps: sample collection, extraction, library preparation, sequencing, quality control, and analysis.</desc>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <g class="node c-teal">
+          <rect x="190" y="20" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="44" text-anchor="middle" dominant-baseline="central">Step 1: Sample collection</text>
+          <text class="ts" x="340" y="62" text-anchor="middle" dominant-baseline="central">Blood, tissue, saliva, swab</text>
+        </g>
+        <line x1="340" y1="76" x2="340" y2="106" class="arr" marker-end="url(#arrow)"/>
+        <g class="node c-teal">
+          <rect x="190" y="106" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="130" text-anchor="middle" dominant-baseline="central">Step 2: Extraction</text>
+          <text class="ts" x="340" y="148" text-anchor="middle" dominant-baseline="central">Isolate DNA or RNA from sample</text>
+        </g>
+        <line x1="340" y1="162" x2="340" y2="192" class="arr" marker-end="url(#arrow)"/>
+        <g class="node c-purple">
+          <rect x="190" y="192" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="216" text-anchor="middle" dominant-baseline="central">Step 3: Library preparation</text>
+          <text class="ts" x="340" y="234" text-anchor="middle" dominant-baseline="central">Fragment, ligate adapters, amplify</text>
+        </g>
+        <line x1="340" y1="248" x2="340" y2="278" class="arr" marker-end="url(#arrow)"/>
+        <g class="node c-purple">
+          <rect x="190" y="278" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="302" text-anchor="middle" dominant-baseline="central">Step 4: Sequencing</text>
+          <text class="ts" x="340" y="320" text-anchor="middle" dominant-baseline="central">Sequencer reads millions of fragments</text>
+        </g>
+        <line x1="340" y1="334" x2="340" y2="364" class="arr" marker-end="url(#arrow)"/>
+        <g class="node c-amber">
+          <rect x="190" y="364" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="388" text-anchor="middle" dominant-baseline="central">Step 5: Quality control</text>
+          <text class="ts" x="340" y="406" text-anchor="middle" dominant-baseline="central">Check reads — length, quality, contamination</text>
+        </g>
+        <line x1="340" y1="420" x2="340" y2="450" class="arr" marker-end="url(#arrow)"/>
+        <g class="node c-coral">
+          <rect x="190" y="450" width="300" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="474" text-anchor="middle" dominant-baseline="central">Step 6: Analysis</text>
+          <text class="ts" x="340" y="492" text-anchor="middle" dominant-baseline="central">Align, call variants, count genes</text>
+        </g>
+      </svg>
+      <p class="step-note">Each of these steps will have its own dedicated module in this course.</p>
+    </div>
+
+    <h3>Step 1: Sample collection</h3>
+    <p>It starts with a biological sample — blood, saliva, tissue, a swab. Inside that sample is DNA or RNA carrying the genetic information we want to read. The quality of what comes out at the end depends heavily on what goes in here. A degraded sample produces degraded data.</p>
+
+    <h3>Step 2: DNA or RNA extraction</h3>
+    <p>The genetic material is separated from everything else in the sample — cells, proteins, other molecules. What remains is the raw material for sequencing.</p>
+
+    <h3>Step 3: Library preparation</h3>
+    <p>This is where the magic begins. The DNA or RNA is fragmented into smaller pieces, and short synthetic sequences called adapters are attached to each fragment. These adapters are what allow the sequencer to recognise and read each piece. Think of them as handles the machine grabs onto.</p>
+
+    <h3>Step 4: Sequencing</h3>
+    <p>The prepared library goes into the sequencer. The machine reads each fragment millions of times over, recording the sequence of bases — A, T, C, G — in each one. The output is a massive file of short reads, each representing a tiny piece of the original genome.</p>
+
+    <h3>Step 5: Quality control</h3>
+    <p>Before any analysis begins, the data is checked. Are the reads long enough? Is the quality high enough? Are there contaminants? This step — quality control — is unglamorous but critical. Bad data in means bad answers out.</p>
+
+    <h3>Step 6: Analysis</h3>
+    <p>Now the real work begins. Reads are aligned to a reference genome, variants are called, genes are counted, patterns are identified. This is where bioinformatics lives — and where the biological question finally gets an answer.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 4 -->
+  <section class="section" id="applications">
+    <div class="section-number">Section 4</div>
+    <h2>The NGS application landscape</h2>
+
+    <p>NGS is not a single tool for a single problem. It is a platform — and depending on how you use it, it can answer completely different questions.</p>
+
+    <div class="diagram-container">
+      <div class="diagram-label">Four major application areas</div>
+      <svg width="100%" viewBox="0 0 680 460" role="img">
+        <title>NGS application landscape</title>
+        <desc>Hub-and-spoke diagram: NGS at the centre connecting to infectious disease genomics, cancer genomics, clinical NGS, and RNA-Seq.</desc>
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <g class="node c-gray">
+          <rect x="265" y="186" width="150" height="56" rx="8" stroke-width="0.5"/>
+          <text class="th" x="340" y="210" text-anchor="middle" dominant-baseline="central">NGS</text>
+          <text class="ts" x="340" y="228" text-anchor="middle" dominant-baseline="central">Next-generation sequencing</text>
+        </g>
+        <line x1="265" y1="210" x2="192" y2="140" class="arr" marker-end="url(#arrow2)" stroke-width="1"/>
+        <g class="node c-teal">
+          <rect x="28" y="84" width="162" height="68" rx="8" stroke-width="0.5"/>
+          <text class="th" x="109" y="108" text-anchor="middle" dominant-baseline="central">Infectious disease</text>
+          <text class="ts" x="109" y="126" text-anchor="middle" dominant-baseline="central">genomics</text>
+          <text class="ts" x="109" y="142" text-anchor="middle" dominant-baseline="central">TB · HIV · malaria · cholera</text>
+        </g>
+        <line x1="415" y1="210" x2="490" y2="140" class="arr" marker-end="url(#arrow2)" stroke-width="1"/>
+        <g class="node c-coral">
+          <rect x="492" y="84" width="160" height="68" rx="8" stroke-width="0.5"/>
+          <text class="th" x="572" y="108" text-anchor="middle" dominant-baseline="central">Cancer genomics</text>
+          <text class="ts" x="572" y="126" text-anchor="middle" dominant-baseline="central">Mutations · variants</text>
+          <text class="ts" x="572" y="142" text-anchor="middle" dominant-baseline="central">tumour profiling</text>
+        </g>
+        <line x1="265" y1="228" x2="192" y2="306" class="arr" marker-end="url(#arrow2)" stroke-width="1"/>
+        <g class="node c-purple">
+          <rect x="28" y="286" width="162" height="68" rx="8" stroke-width="0.5"/>
+          <text class="th" x="109" y="306" text-anchor="middle" dominant-baseline="central">Clinical NGS</text>
+          <text class="ts" x="109" y="324" text-anchor="middle" dominant-baseline="central">Variant calling</text>
+          <text class="ts" x="109" y="340" text-anchor="middle" dominant-baseline="central">rare disease diagnosis</text>
+        </g>
+        <line x1="415" y1="228" x2="490" y2="306" class="arr" marker-end="url(#arrow2)" stroke-width="1"/>
+        <g class="node c-amber">
+          <rect x="492" y="286" width="160" height="68" rx="8" stroke-width="0.5"/>
+          <text class="th" x="572" y="306" text-anchor="middle" dominant-baseline="central">RNA-Seq</text>
+          <text class="ts" x="572" y="324" text-anchor="middle" dominant-baseline="central">Transcriptomics</text>
+          <text class="ts" x="572" y="340" text-anchor="middle" dominant-baseline="central">gene expression</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="app-grid">
+      <div class="app-card teal">
+        <div class="app-card-title">Infectious disease genomics</div>
+        <p>Track pathogens in real time. TB drug resistance, HIV evolution, malaria strain surveillance, cholera outbreak tracking — NGS tells you exactly what kind of pathogen you are dealing with and whether your drugs will still work.</p>
+      </div>
+      <div class="app-card coral">
+        <div class="app-card-title">Cancer genomics</div>
+        <p>Cancer is a disease of the genome. NGS reads the mutations driving a tumour and in some cases matches the patient to a treatment that targets their specific tumour profile.</p>
+      </div>
+      <div class="app-card purple">
+        <div class="app-card-title">Clinical NGS and variant calling</div>
+        <p>Rare disease diagnosis, pharmacogenomics, newborn screening. A child with an undiagnosed condition can sometimes be diagnosed with a single whole exome sequencing run.</p>
+      </div>
+      <div class="app-card amber">
+        <div class="app-card-title">RNA-Seq and transcriptomics</div>
+        <p>While DNA tells us what genes a cell has, RNA tells us which genes are actually being used — and when, and how much. RNA-Seq gives us a dynamic picture of gene expression.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Section 5 -->
+  <section class="section" id="what-you-learn">
+    <div class="section-number">Section 5</div>
+    <h2>What this course will teach you</h2>
+
+    <p>There is no shortage of NGS tutorials on the internet. Most of them assume you already know why you are running a command before they teach you how to run it. Many of them were built for contexts very different from the ones you work in.</p>
+
+    <p>This course is different.</p>
+
+    <p>NGS Hub was built for scientists who are working — or want to work — in African research and clinical settings. It takes seriously the reality that your samples, your diseases, your infrastructure, and your questions are specific. And it teaches NGS in a way that respects that specificity.</p>
+
+    <h3>A clear mental model of how sequencing works</h3>
+    <p>Before you touch a tool or write a command, you will understand what is actually happening at each step of a sequencing workflow. That understanding is what makes you adaptable — able to troubleshoot when something goes wrong, and able to learn new tools quickly because you already know what they are supposed to do.</p>
+
+    <h3>Hands-on experience with real workflows</h3>
+    <p>Every module is built around a scenario — a real biological question, a real dataset, a real decision to make. You will not practice on abstract examples. You will work through the kind of problems that show up in African research and clinical labs.</p>
+
+    <h3>The ability to read and interpret your data</h3>
+    <p>Generating sequencing data is only the beginning. This course will teach you to assess quality, identify problems, interpret results, and communicate findings — the skills that turn raw data into real answers.</p>
+
+    <h3>Confidence to apply NGS in your own work</h3>
+    <p>Whether you are a graduate student designing your first RNA-Seq experiment, a clinical lab scientist encountering NGS for the first time, or a researcher wanting to add genomics to your toolkit — this course will meet you where you are and take you somewhere useful.</p>
+  </section>
+
+  <div class="closing-block">
+    <p>You do not need to be an expert to start. You need to be curious, willing to work through the material, and ready to see what your data can tell you.</p>
+    <div class="cta">That is enough. Let us begin.</div>
+  </div>
+
+</main>
+
+
+<footer style="background:#1a1a18;color:rgba(255,255,255,0.5);text-align:center;padding:32px 20px;font-size:13px;font-family:'DM Sans',sans-serif;">
+  <p style="margin-bottom:6px;color:rgba(255,255,255,0.8);font-weight:500;">NGS Hub · Joy Manyasi Kabaka</p>
+  <p>Part of the <a href="https://sequenceafrica.substack.com" style="color:#5DCAA5;text-decoration:none;">Sequence Africa</a> initiative · 
+  <a href="https://github.com/joymanyasi/ngs-hub" style="color:#5DCAA5;text-decoration:none;">GitHub</a></p>
+</footer>
+</body>
+</html>
